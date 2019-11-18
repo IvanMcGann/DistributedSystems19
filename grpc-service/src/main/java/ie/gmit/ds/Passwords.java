@@ -1,4 +1,4 @@
-package ie.gmit.ds.grpc_service;
+package ie.gmit.ds;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

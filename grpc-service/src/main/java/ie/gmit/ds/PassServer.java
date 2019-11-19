@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
-//Adapted from the grpc-async-inventory lab
+// Adapted from the grpc-async-inventory lab
 
 public class PassServer {
 
@@ -18,9 +18,10 @@ public class PassServer {
 	private Server grpcServer;
 	private static final Logger logger = Logger.getLogger(PassServer.class.getName());
 	private static final int PORT = 50551;
+	private String connect = "Server has started...." + PORT;
 
 	private void start() throws IOException {
-		//grpcServer = ServerBuilder.forPort(PORT).addService(new PwServiceImpl()).build().start();
+		grpcServer = ServerBuilder.forPort(PORT).addService(new PwServiceImpl()).build().start();
 		logger.info("Server started, listening on " + PORT);
 
 	}
@@ -31,10 +32,6 @@ public class PassServer {
 		}
 	}
 
-	/**
-	 * Await termination on the main thread since the grpc library uses daemon
-	 * threads.
-	 */
 	private void blockUntilShutdown() throws InterruptedException {
 		if (grpcServer != null) {
 			grpcServer.awaitTermination();

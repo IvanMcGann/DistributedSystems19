@@ -1,7 +1,6 @@
 package ie.gmit.ds;
 
 import com.google.protobuf.BoolValue;
-import com.google.protobuf.ByteString;
 import io.grpc.stub.StreamObserver;
 
 // Adapted from the grpc-async-inventory lab
@@ -9,14 +8,12 @@ import io.grpc.stub.StreamObserver;
 public class PwServiceImpl extends PasswordServiceGrpc.PasswordServiceImplBase {
 
 	@Override
-	public void validate() {
-
+	public void validate(ValidateRequest request, StreamObserver<BoolValue> response) {
 
 
 	}
 
 	@Override
-	public void hash() {
-
+	public void hash(HashRequest resquest, StreamObserver<HashResponse> response) {
 	}
 }

@@ -18,7 +18,7 @@ public class PassServer {
 	private Server grpcServer;
 	private static final Logger logger = Logger.getLogger(PassServer.class.getName());
 	private static final int PORT = 50551;
-	private String connect = "Server has started...." + PORT;
+	private String connect = "The Server has started...." + PORT;
 
 	private void start() throws IOException {
 		grpcServer = ServerBuilder.forPort(PORT).addService(new PwServiceImpl()).build().start();

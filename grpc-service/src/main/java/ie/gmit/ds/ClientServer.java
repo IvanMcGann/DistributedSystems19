@@ -1,6 +1,5 @@
 package ie.gmit.ds;
 
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
@@ -11,17 +10,16 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
-//Adapted from the grpc-async-inventory lab
-
 public class ClientServer {
 
+	// logger used to log message for application component
 	private static final Logger logger = Logger.getLogger(ClientServer.class.getName());
 	private final ManagedChannel channel;
-
 	private final PasswordServiceGrpc.PasswordServiceStub asyncService;
 	private final PasswordServiceGrpc.PasswordServiceBlockingStub syncService;
-	
-	
+	private ByteString expectedHash;
+	private ByteString salt;
+
 	public ClientServer(String host, int port) {
 		channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
 		syncService = PasswordServiceGrpc.newBlockingStub(channel);
@@ -32,38 +30,67 @@ public class ClientServer {
 		channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
 	}
 
-	/*
-	 * public void addNewInventoryItem(Item newItem) {
-	 * logger.info("Adding new inventory item " + newItem); BoolValue result =
-	 * BoolValue.newBuilder().setValue(false).build(); try { result =
-	 * syncInventoryService.addItem(newItem); } catch (StatusRuntimeException ex) {
-	 * logger.log(Level.WARNING, "RPC failed: {0}", ex.getStatus()); return; } if
-	 * (result.getValue()) { logger.info("Successfully added item " + newItem); }
-	 * else { logger.warning("Failed to add item"); } }
-	 * 
-	 * private void getItems() { StreamObserver<Items> responseObserver = new
-	 * StreamObserver<Items>() {
-	 * 
-	 * @Override public void onNext(Items items) { logger.info("Received items: " +
-	 * items); }
-	 * 
-	 * @Override public void onError(Throwable throwable) { Status status =
-	 * Status.fromThrowable(throwable);
-	 * 
-	 * logger.log(Level.WARNING, "RPC Error: {0}", status); }
-	 * 
-	 * @Override public void onCompleted() {
-	 * logger.info("Finished receiving items"); // End program System.exit(0); } };
-	 * 
-	 * try { logger.info("Requesting all items ");
-	 * asyncInventoryService.getItems(Empty.newBuilder().build(), responseObserver);
-	 * logger.info("Returned from requesting all items "); } catch
-	 * (StatusRuntimeException ex) { logger.log(Level.WARNING, "RPC failed: {0}",
-	 * ex.getStatus()); return; } }
-	 */
-
 	public static void main(String[] args) throws Exception {
 		ClientServer client = new ClientServer("localhost", 50551);
+
+	}
+
+	// getters
+	public ByteString getExpectedHash() {
+		return expectedHash;
+	}
+
+	public ByteString getSalt() {
+		return salt;
+	}
+
+	public void hash(int userId, String password) {
+
+		StreamObserver<HashResponse> hr = new StreamObserver<HashResponse>() {
+
+			@Override
+			public void onNext(HashResponse value) {
+				// TODO Auto-generated method stub
+				salt = value.getSalt();
+				expectedHash = value.getHashPassword();
+
+			}
+
+			@Override
+			public void onError(Throwable t) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onCompleted() {
+				// TODO Auto-generated method stub
+
+			}
+		};
+
+		try {
+			logger.info("Retrieve users");
+			HashRequest hrq = HashRequest.newBuilder().setUserId(userId).setPassword(password).build();
+			asyncService.hash(hrq, hr);
+			TimeUnit.SECONDS.sleep(10);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return;
+		}
+		return;
+	}
+
+	public boolean validate(ByteString hash, ByteString salt, String password) {
+
+		try {
+			BoolValue value = syncService.validate(
+					ValidateRequest.newBuilder().setHashPassword(hash).setSalt(salt).setPassword(password).build());
+			return value.getValue();
+		} catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
 
 	}
 

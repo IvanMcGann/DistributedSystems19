@@ -1,8 +1,9 @@
 # Distributed Systems Project 2019 (part 1) 
 
-A 2 part distributed user account management system, part onw is a gRPC Password Service.
+A 2 part distributed user account management system, part one is a gRPC Password Service.
 
 
+#### Information:
 
 Name: Ivan McGann
 

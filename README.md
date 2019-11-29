@@ -1,15 +1,19 @@
-# Distributed Systems 2019
+# Distributed Systems Project 2019 (part 1) 
 
 A 2 part distributed user account management system, part onw is a gRPC Password Service.
 
 
 
 Name: Ivan McGann
+
 Student No: G00340138
+
 Email: G00340138@gmit.ie
+
 Github repo: https://github.com/IvanMcGann/DistributedSystems19
 
-Intro:
+
+## Intro:
 The purpose of this project is to gain practical experience in interprocess communication protocols used in modern distributed systems. You’ll build a distributed user account management system in two parts. Each part of the project will involve developing a service which will be able to connect to other services via APIs. Each service will be submitted separately. 
 
 The two interconnected services you’ll develop are as follows:
@@ -17,7 +21,7 @@ The two interconnected services you’ll develop are as follows:
 • Part 1: gRPC Password service
 • Part 2: RESTful User Account Service
 
-Links used:
+## Links used:
 
 Password code:
 
